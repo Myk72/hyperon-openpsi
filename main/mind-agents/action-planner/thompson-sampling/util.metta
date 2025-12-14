@@ -67,8 +67,8 @@
 (= (matchContext $ruleId $context $space) (
     let* (
         ($ruleContext (getContext $ruleId $space))
-        ($contextCount (size-atom $ruleContext))
-        ($intersection (intersection-atom $ruleContext $context))
+        ($contextCount (size-atom ($context)))
+        ($intersection (intersection-atom ($ruleContext) ($context)))
         ($matchCount (size-atom $intersection))
     ) (if (== $contextCount $matchCount)
         $ruleId
@@ -142,9 +142,11 @@
     let* (
         (($strength $confidence) (getSTV $ruleId $space))
         (($alpha $beta) (stvToBeta ($strength $confidence)))
+        ; ($_ (println! ("Old STV: " ($strength $confidence) " Alpha: " $alpha " Beta: " $beta)))
         ($newAlpha (if (== $result 1) (+ $alpha 1) $alpha))
         ($newBeta (if (== $result 1) $beta (+ $beta 1)))
         (($newStrength $newConfidence) (betaToSTV ($newAlpha $newBeta)))
+        ; ($_ (println! ("New STV: " ($newStrength $newConfidence) " New Alpha: " $newAlpha " New Beta: " $newBeta)))
         ($_ (updateSTV $ruleId ($newStrength $newConfidence) $space))
     ) ()
 ))

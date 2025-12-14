@@ -2,8 +2,8 @@
 (: isBetween (-> Number Number Number Bool))
 (= (isBetween $val $low $high) (and (>= $val $low) (<= $val $high)))
 
-(: max (-> Number Number Number))
-(= (max $x $y) (if (> $x $y) $x $y))
+; (: max (-> Number Number Number))
+; (= (max $x $y) (if (> $x $y) $x $y))
 
 (: min (-> Number Number Number))
 (= (min $x $y) (if (> $x $y) $y $x))
