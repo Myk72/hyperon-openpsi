@@ -16,13 +16,16 @@
 !(import! &self hyperon-openpsi:main:mind-agents:action-planner:thompson-sampling:math)
 
 !(register-module! ../../../utilities-module)
-; !(import! &self utilities-module:utils)
+!(import! &self utilities-module:utils)
 !(import! &self hyperon-openpsi:psi-utilities:psi_utils)
 
 !(bind! &kb (new-space))
 !(bind! &demandSpace (new-space))
+!(bind! &modulatorSpace (new-space))
 
+!(insert-modulators &modulatorSpace)
 
+; !(get-atoms &modulatorSpace)
 (= (random $x $y) (
     (py-atom random.randint) $x $y
 ))
@@ -77,9 +80,5 @@
 !(println! "Running 1st loop ...")
 
 ; !(get-atoms &demandSpace)
-!(psi-agent-loop-ts init &kb &ruleSpace &demandSpace)
+!(psi-agent-loop-ts init &kb &ruleSpace &demandSpace &modulatorSpace)
 ; !(get-atoms &demandSpace)
-
-;; Run again
-!(println! "Running 2nd loop ...")
-!(psi-agent-loop-ts init &kb &ruleSpace &demandSpace)

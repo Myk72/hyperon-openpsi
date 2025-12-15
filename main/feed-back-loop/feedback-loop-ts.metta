@@ -1,6 +1,6 @@
 ;; Main loop with Thompson Sampling
 
-(= (psi-agent-loop-ts $state $kb $ruleSpace $demandSpace)
+(= (psi-agent-loop-ts $state $kb $ruleSpace $demandSpace $modulatorSpace)
     (let* (
         
         ($currDemand (fetchLeastSatisfiedDemand $kb))
@@ -44,8 +44,29 @@
                     ()
                 ))
 
+                ;; Modulator Updates
+                ($competenceDemand (getDemandByName $demandSpace competence)) 
+                ($affiliationDemand (getDemandByName $demandSpace affiliation))
+                ($energyDemand (getDemandByName $demandSpace energy))
+                ($_ (println! (Demand Values: $competenceDemand $affiliationDemand $energyDemand)))
+                
+                ($modUpdate (modulatorUpdaterAgent $modulatorSpace $competenceDemand $affiliationDemand $energyDemand))
+                ($_ (println! (modUpdate $modUpdate modulatorValues (collapse (get-atoms $modulatorSpace)))))
+                
+                ($happinessValue (happinessFeelingUpdater $modulatorSpace))
+                ($sadnessValue (sadnessFeelingUpdater $modulatorSpace))
+                ($angerValue (angerFeelingUpdater $modulatorSpace))
+                ($fearValue (fearFeelingUpdater $modulatorSpace))
+                ($excitementValue (excitementFeelingUpdater $modulatorSpace))
+                ($loveValue (loveFeelingUpdater $modulatorSpace))
+                ($hateValue (hateFeelingUpdater $modulatorSpace))
+                ($gratitude (gratitudeFeelingUpdater $modulatorSpace))
+                
+                ($_ (update-all modulator $modulatorSpace $kb))
+                ($_ (update-all demand $demandSpace $kb))
+
             ) 
-             (happinessValue 0.5 sadnessValue 0.1 angerValue 0.1 fearValue 0.1 gratitudeValue 0.1) ;; please use proper modulators later
+             (happinessValue $happinessValue sadnessValue $sadnessValue angerValue $angerValue fearValue $fearValue gratitudeValue $gratitude)
             )
         )
     )
